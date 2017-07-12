@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AppSettingsSection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConfigurationElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConfigurationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConfigurationSection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionStringsSection.cs" />

@@ -2,7 +2,7 @@
 
 namespace System.Configuration
 {
-    internal abstract class ConfigurationSection
+    internal abstract class ConfigurationSection : ConfigurationElement
     {
         /// <summary>
         /// Gets a configuration value.

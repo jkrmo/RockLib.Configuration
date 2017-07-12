@@ -21,7 +21,7 @@ namespace System.Configuration
         private static readonly ConcurrentDictionary<string, ConvertibleConfigurationSection> _sectionCache = new ConcurrentDictionary<string, ConvertibleConfigurationSection>(StringComparer.OrdinalIgnoreCase);
 
         private static Lazy<IConfigurationRoot> _configurationRoot = new Lazy<IConfigurationRoot>(GetDefaultConfigurationRoot);
-
+        
         /// <summary>
         /// Gets or sets the <see cref="IConfigurationRoot"/> that is the backing store for the other public
         /// members of the <see cref="ConfigurationManager"/> class.
@@ -64,13 +64,38 @@ namespace System.Configuration
             }) ?? throw new KeyNotFoundException($"The given section name, '{sectionName}', was not present in the configuration.");
         }
 
+        /// <summary>
+        /// Override to change the name of your RockLib configuration file.
+        /// 
+        /// The Default name is RockLib.config.json
+        /// </summary>
+        public static string RockLibConfigFileName { get; set; } = "rocklib.config.json";
+
+        /// <summary>
+        /// Override to allow prefix filtering when adding environment variables to the configuration root
+        /// </summary>
+        public static string EnvironmentVariablesPrefix { get; set; } = "";
+
+        /// <summary>
+        /// Override to change the base path used when constructing the ConfigurationRoot instance
+        /// </summary>
+        public static string BaseConfigurationPath { get; set; } = "";
+
         private static IConfigurationRoot GetDefaultConfigurationRoot()
         {
-            var configurationRoot = new ConfigurationBuilder()
-                .AddRockLib()
-                .AddEnvironmentVariables()
-                .Build();
+            var configurationBuilder = new ConfigurationBuilder()
+                .AddRockLib(RockLibConfigFileName)
+                .AddEnvironmentVariables(EnvironmentVariablesPrefix);
 
+            // Not always are people going to want to change the base path but
+            //  we need to provide this ability
+            if (!string.IsNullOrEmpty(BaseConfigurationPath))
+            {
+                configurationBuilder.SetBasePath(BaseConfigurationPath);
+            }
+        
+            var configurationRoot = configurationBuilder.Build();
+            
             return configurationRoot;
         }
     }

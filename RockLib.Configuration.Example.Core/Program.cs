@@ -16,7 +16,7 @@ namespace RockLib.Configuration.Example.Core
                 string defaultConnectionString = ConfigurationManager.ConnectionStrings["Default"];
                 FooSection foo = (FooSection)ConfigurationManager.GetSection("Foo");
                 FooSection foo2 = (FooSection)ConfigurationManager.GetSection("Foo");
-
+               
                 Console.WriteLine($"applicationId: {applicationId}");
                 Console.WriteLine($"defaultConnectionString: {defaultConnectionString}");
                 Console.WriteLine($"foo: {JsonConvert.SerializeObject(foo)}");

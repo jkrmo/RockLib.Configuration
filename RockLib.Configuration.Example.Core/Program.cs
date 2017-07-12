@@ -10,24 +10,33 @@ namespace RockLib.Configuration.Example.Core
         {
             Console.WriteLine("Configuration Manager Exmple Harness");
 
-            try
-            {
-                string applicationId = ConfigurationManager.AppSettings["ApplicationId"];
-                string defaultConnectionString = ConfigurationManager.ConnectionStrings["Default"];
-                FooSection foo = (FooSection)ConfigurationManager.GetSection("Foo");
-                FooSection foo2 = (FooSection)ConfigurationManager.GetSection("Foo");
-               
-                Console.WriteLine($"applicationId: {applicationId}");
-                Console.WriteLine($"defaultConnectionString: {defaultConnectionString}");
-                Console.WriteLine($"foo: {JsonConvert.SerializeObject(foo)}");
-                Console.WriteLine($"foo is same instance as foo2: {ReferenceEquals(foo, foo2)}");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            GetAndDisplayAppSettingValue("ApplicationId");
+            GetAndDisplayConnectionValue("Alternate");
+            GetAndDisplaySection("Foo");
+
 
             Console.ReadLine();
+        }
+
+        private static void GetAndDisplayAppSettingValue(string key)
+        {
+            var foundValue = ConfigurationManager.AppSettings[key];
+
+            Console.WriteLine($"AppSetting value for Key '{key}' is '{foundValue}'");
+        }
+
+        private static void GetAndDisplayConnectionValue(string key)
+        {
+            var foundValue = ConfigurationManager.ConnectionStrings[key];
+
+            Console.WriteLine($"Connection String value for Key '{key}' is '{foundValue}'");
+        }
+
+        private static void GetAndDisplaySection(string key)
+        {
+            var fooSection = (FooSection)ConfigurationManager.GetSection(key);
+
+            Console.WriteLine($"Section Value for Key '{key}' is '{JsonConvert.SerializeObject(fooSection)}'");
         }
 
         class FooSection

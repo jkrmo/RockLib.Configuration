@@ -2,6 +2,7 @@
 using RockLib.Configuration;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace System.Configuration
@@ -22,6 +23,8 @@ namespace System.Configuration
 
         private static Lazy<IConfigurationRoot> _configurationRoot = new Lazy<IConfigurationRoot>(GetDefaultConfigurationRoot);
 
+        private static readonly AppSettingsSection _appSettingsSection = new AppSettingsSection();
+
         /// <summary>
         /// Gets or sets the <see cref="IConfigurationRoot"/> that is the backing store for the other public
         /// members of the <see cref="ConfigurationManager"/> class.
@@ -41,7 +44,7 @@ namespace System.Configuration
         /// <summary>
         /// Gets the <see cref="AppSettingsSection"/> data for the current application's default configuration.
         /// </summary>
-        public static AppSettingsSection AppSettings { get; } = new AppSettingsSection();
+        public static NameValueCollection AppSettings => _appSettingsSection.NameValueCollection;
 
         /// <summary>
         /// Gets the <see cref="ConnectionStringsSection"/> data for the current application's default configuration.

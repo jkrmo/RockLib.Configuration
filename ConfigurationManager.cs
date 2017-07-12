@@ -41,12 +41,12 @@ namespace System.Configuration
         /// <summary>
         /// Gets the <see cref="AppSettingsSection"/> data for the current application's default configuration.
         /// </summary>
-        public static AppSettingsSection AppSettings { get; } = new AppSettingsSection(() => ConfigurationRoot);
+        public static AppSettingsSection AppSettings { get; } = new AppSettingsSection();
 
         /// <summary>
         /// Gets the <see cref="ConnectionStringsSection"/> data for the current application's default configuration.
         /// </summary>
-        public static ConnectionStringsSection ConnectionStrings { get; } = new ConnectionStringsSection(() => ConfigurationRoot);
+        public static ConnectionStringsSection ConnectionStrings { get; } = new ConnectionStringsSection();
 
         /// <summary>
         /// Retrieves a specified configuration section for the current application's default configuration.

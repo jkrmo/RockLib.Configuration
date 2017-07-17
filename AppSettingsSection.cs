@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace System.Configuration
 {
@@ -8,23 +8,60 @@ namespace System.Configuration
     /// </summary>
     internal sealed class AppSettingsSection : ConfigurationSection
     {
-        private readonly Lazy<NameValueCollection> _nameValueCollection;
+        public NameValueCollection Settings { get; } = new NameValueCollection();
 
-        public AppSettingsSection()
+        protected override object this[string key]
         {
-            _nameValueCollection = new Lazy<NameValueCollection>(() =>
+            get
             {
-                var section = ConfigurationManager.ConfigurationRoot.GetSection(ElementName);
-                var nameValueCollection = new NameValueCollection();
-                foreach (var child in section.GetChildren()) 
-                    if (child.Value != null)
-                        nameValueCollection.Add(child.Key, child.Value);
-                return nameValueCollection;
-            });
+                SyncWithSettings();
+                return base[key];
+            }
+            set
+            {
+                base[key] = value;
+                Settings[key] = (string)value;
+            }
         }
 
-        protected override string ElementName => "AppSettings";
+        private void SyncWithSettings()
+        {
+            var different = false;
+            if (Settings.Count == Count)
+            {
+                foreach (string settingsKey in Settings.Keys)
+                {
+                    if (!Settings[settingsKey].Equals(base[settingsKey]))
+                    {
+                        different = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                different = true;
+            }
+            if (different)
+            {
+                Clear();
+                foreach (string settingsKey in Settings.Keys)
+                {
+                    base[settingsKey] = Settings[settingsKey];
+                }
+            }
+        }
 
-        public NameValueCollection NameValueCollection => _nameValueCollection.Value;
+        protected override void CheckValue(string key, ref object value)
+        {
+            base.CheckValue(key, ref value);
+            if (!(value is string))
+            {
+                var converter = TypeDescriptor.GetConverter(value);
+                if (!converter.CanConvertTo(typeof(string)))
+                    throw new ArgumentException("Invalid value for AppSettingsSection. Must be string or convertible to string via TypeDescriptor.GetConverter.", nameof(value));
+                value = converter.ConvertTo(value, typeof(string));
+            }
+        }
     }
 }

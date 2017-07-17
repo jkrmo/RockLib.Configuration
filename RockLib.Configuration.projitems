@@ -11,11 +11,15 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AppSettingsSection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConfigurationElement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConfigurationElementCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConfigurationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConfigurationSection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionStringSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionStringSettingsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConnectionStringsSection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConvertibleConfigurationSection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InternalsVisibleTo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RockLibConfigurationBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Temp.cs" />
   </ItemGroup>
 </Project>

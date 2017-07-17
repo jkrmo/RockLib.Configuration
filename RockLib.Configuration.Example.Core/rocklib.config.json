@@ -5,7 +5,8 @@
         "AffectedSystem": "Log4NetExample"
     },
     "ConnectionStrings": {
-        "Default": "schema://path"
+        "Default": "schema://path#default",
+        "Special": { "connectionString": "schema://path#special", "providerName": "foo" }
     },
     "Foo": {
         "Bar": 123,

@@ -23,7 +23,13 @@ namespace System.Configuration
 
         private static Lazy<IConfigurationRoot> _configurationRoot = new Lazy<IConfigurationRoot>(GetDefaultConfigurationRoot);
 
-        private static readonly AppSettingsSection _appSettingsSection = new AppSettingsSection();
+        private static Lazy<AppSettingsSection> _appSettingsSection;
+        private static Lazy<ConnectionStringsSection> _connectionStringsSection;
+
+        static ConfigurationManager()
+        {
+            ResetSections();
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="IConfigurationRoot"/> that is the backing store for the other public
@@ -36,20 +42,22 @@ namespace System.Configuration
             get { return _configurationRoot.Value; }
             set
             {
-                if (value == null) _configurationRoot = new Lazy<IConfigurationRoot>(GetDefaultConfigurationRoot);
-                else _configurationRoot = new Lazy<IConfigurationRoot>(() => value);
+                if (ReferenceEquals(value, _configurationRoot)) return;
+                ResetSections();
+                if (value != null) _configurationRoot = new Lazy<IConfigurationRoot>(() => value);
+                else _configurationRoot = new Lazy<IConfigurationRoot>(GetDefaultConfigurationRoot);                    
             }
         }
 
         /// <summary>
         /// Gets the <see cref="AppSettingsSection"/> data for the current application's default configuration.
         /// </summary>
-        public static NameValueCollection AppSettings => _appSettingsSection.NameValueCollection;
+        public static NameValueCollection AppSettings => _appSettingsSection.Value.Settings;
 
         /// <summary>
         /// Gets the <see cref="ConnectionStringsSection"/> data for the current application's default configuration.
         /// </summary>
-        public static ConnectionStringsSection ConnectionStrings { get; } = new ConnectionStringsSection();
+        public static ConnectionStringSettingsCollection ConnectionStrings => _connectionStringsSection.Value.ConnectionStrings;
 
         /// <summary>
         /// Retrieves a specified configuration section for the current application's default configuration.
@@ -65,6 +73,12 @@ namespace System.Configuration
                 if (section.Value == null && !section.GetChildren().Any()) return null;
                 return new ConvertibleConfigurationSection(section);
             }) ?? throw new KeyNotFoundException($"The given section name, '{sectionName}', was not present in the configuration.");
+        }
+
+        private static void ResetSections()
+        {
+            _appSettingsSection = new Lazy<AppSettingsSection>(() => (AppSettingsSection)GetSection("AppSettings"));
+            _connectionStringsSection = new Lazy<ConnectionStringsSection>(() => (ConnectionStringsSection)GetSection("ConnectionStrings"));
         }
 
         private static IConfigurationRoot GetDefaultConfigurationRoot()

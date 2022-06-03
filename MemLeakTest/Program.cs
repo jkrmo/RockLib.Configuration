@@ -25,7 +25,7 @@ namespace MemLeakTest
             await Task.CompletedTask;
         }
 
-        public interface ILogger
+        public interface ILogger : IDisposable
         {
 
         }

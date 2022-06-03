@@ -9,14 +9,16 @@ using System.Text;
 
 namespace RockLib.Configuration.ObjectFactory
 {
-   // Given that this class is already public,
-   // changing how IDisposable is implemented could be a breaking change,
-   // hence the #pragmas
 
-   /// <summary>
-   /// The base class for reloading proxy classes.
-   /// </summary>
-   [DebuggerDisplay("{" + nameof(Object) + "}")]
+    
+    // Given that this class is already public,
+    // changing how IDisposable is implemented could be a breaking change,
+    // hence the #pragmas
+
+    /// <summary>
+    /// The base class for reloading proxy classes.
+    /// </summary>
+    [DebuggerDisplay("{" + nameof(Object) + "}")]
 #pragma warning disable CA1063 // Implement IDisposable Correctly
    public abstract class ConfigReloadingProxy<TInterface> : IDisposable
 #pragma warning restore CA1063 // Implement IDisposable Correctly
@@ -31,6 +33,8 @@ namespace RockLib.Configuration.ObjectFactory
 
       private readonly object _thisLock = new();
 
+
+        private IDisposable _changeToken;
       /// <summary>
       /// Initializes a new instance of the <see cref="ConfigReloadingProxy{TInterface}"/> class.
       /// </summary>
@@ -66,7 +70,7 @@ namespace RockLib.Configuration.ObjectFactory
          _resolver = resolver ?? Resolver.Empty;
          _hash = GetHash();
          Object = CreateObject();
-         ChangeToken.OnChange(section.GetReloadToken, () => ReloadObject(false));
+            _changeToken = ChangeToken.OnChange(section.GetReloadToken, () => ReloadObject(false));
       }
 
       /// <summary>
@@ -97,7 +101,11 @@ namespace RockLib.Configuration.ObjectFactory
       /// </summary>
 #pragma warning disable CA1063 // Implement IDisposable Correctly
 #pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
-      public void Dispose() => (Object as IDisposable)?.Dispose();
+      public void Dispose()
+        {
+            (Object as IDisposable)?.Dispose();
+            _changeToken?.Dispose();
+        } 
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
 #pragma warning restore CA1063 // Implement IDisposable Correctly
 

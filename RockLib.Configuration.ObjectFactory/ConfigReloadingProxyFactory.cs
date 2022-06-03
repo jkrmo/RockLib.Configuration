@@ -136,6 +136,8 @@ namespace RockLib.Configuration.ObjectFactory
             throw new ArgumentNullException(nameof(configuration));
          if (interfaceType is null)
             throw new ArgumentNullException(nameof(interfaceType));
+         if (!typeof(IDisposable).IsAssignableFrom(interfaceType))
+            throw new ArgumentException($"The type '{ interfaceType.FullName }' must implement `{ nameof(IDisposable )}'");
          if (!interfaceType.IsInterface)
             throw new ArgumentException($"Specified type is not an interface: '{interfaceType.FullName}'.", nameof(interfaceType));
          if (interfaceType == typeof(IEnumerable))
@@ -182,9 +184,11 @@ namespace RockLib.Configuration.ObjectFactory
          foreach (var evt in interfaceType.GetAllEvents())
             AddEvent(proxyTypeBuilder, evt, baseGetObjectMethod, eventFields, implementedMethods);
 
-         // Only add methods that weren't already created in AddProperty and AddEvent.
-         foreach (var method in interfaceType.GetAllMethods().Where(method => !implementedMethods.Contains(method)))
-            AddMethod(proxyTypeBuilder, method, baseGetObjectMethod);
+               // Only add methods that weren't already created in AddProperty and AddEvent.
+#pragma warning disable CA1307 // Specify StringComparison for clarity
+         foreach (var method in interfaceType.GetAllMethods().Where(method => !implementedMethods.Contains(method) && !method.Name.Contains("Dispose")))
+#pragma warning restore CA1307 // Specify StringComparison for clarity
+             AddMethod(proxyTypeBuilder, method, baseGetObjectMethod);
 
          // The eventFields dictionary needs to be fully populated in order to correctly
          // implement the TransferState method.

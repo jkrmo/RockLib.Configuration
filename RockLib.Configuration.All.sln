@@ -42,6 +42,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{813D1914-7
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemLeakTest", "MemLeakTest\MemLeakTest.csproj", "{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,12 @@ Global
 		{498A8328-6B22-452E-9632-6B090B67F6B2}.ReferenceModel|Any CPU.Build.0 = Release|Any CPU
 		{498A8328-6B22-452E-9632-6B090B67F6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{498A8328-6B22-452E-9632-6B090B67F6B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}.ReferenceModel|Any CPU.ActiveCfg = Release|Any CPU
+		{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}.ReferenceModel|Any CPU.Build.0 = Release|Any CPU
+		{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A4D3AE-B1B8-4DC3-8386-98F142AF25BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
